@@ -3,6 +3,7 @@ package main
 import (
 	"boilerplate/database"
 	"boilerplate/handlers"
+	"boilerplate/utils/env"
 
 	"flag"
 	"log"
@@ -18,6 +19,9 @@ var (
 )
 
 func main() {
+	// Verify environment variables
+	env.Verify()
+
 	// Parse command-line flags
 	flag.Parse()
 
@@ -37,8 +41,10 @@ func main() {
 	v1 := app.Group("/api/v1")
 
 	// Bind handlers
-	v1.Get("/users", handlers.UserList)
-	v1.Post("/users", handlers.UserCreate)
+	v1.Get("/user", handlers.UserGet)
+	v1.Post("/user", handlers.UserCreate)
+	v1.Post("/login", handlers.UserLogin)
+	v1.Get("/logoff", handlers.UserLogout)
 
 	// Setup static files
 	app.Static("/", "./static/public")

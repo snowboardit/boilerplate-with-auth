@@ -1,4 +1,4 @@
-# GoFiber Docker Boilerplate
+# GoFiber Docker Boilerplate with Auth
 
 ![Release](https://img.shields.io/github/release/gofiber/boilerplate.svg)
 [![Discord](https://img.shields.io/badge/discord-join%20channel-7289DA)](https://gofiber.io/discord)
@@ -25,7 +25,7 @@ Use the following plugins, in this boilerplate project:
 
 
 ```bash
-go run app.go
+SECRET=mysecret go run app.go
 ```
 
 ### Use local container
@@ -66,10 +66,10 @@ make start
 
 ```bash
 docker build -t gofiber .
-docker run -d -p 3000:3000 gofiber ./app -prod
+docker run -d -p 3000:3000 -e SECRET=mysecret gofiber ./app -prod
 ```
 
 Go to http://localhost:3000:
 
 
-![Go Fiber Docker Boilerplate](./go_fiber_boilerplate.gif)
+![Go Fiber Docker Boilerplate with Auth](./boilerplate-auth.gif)

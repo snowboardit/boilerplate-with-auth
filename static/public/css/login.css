@@ -1,0 +1,15 @@
+section.login {
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+section.login > form {
+  max-width: 40rem;
+}
+
+section.login > form input {
+  width: 18rem;
+}

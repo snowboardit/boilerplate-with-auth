@@ -1,44 +1,45 @@
 const $ = (selector) => document.querySelector(selector);
-const container = $('#users');
-const API_ENDPOINT = '/api/v1/users';
+const container = $('section#user');
+const API_ENDPOINT = '/api/v1/user';
 
-const listUsers = async () => {
-	const response = await fetch(API_ENDPOINT);
-	const data = await response.json();
-	const users = data.users.reverse();
+const getUser = async function () {
+  const response = await fetch(API_ENDPOINT),
+    data = await response.json(),
+    { success, user } = data;
 
-	for (let index = 0; index < users.length; index++) {
-		const child = document.createElement('li');
-		child.className = 'list-group-item';
-		child.innerText = users[index].name;
+  if (!success) {
+    return null;
+  }
 
-		container.appendChild(child);
-	}
+  return user;
 };
 
-$('#add_user').addEventListener('click', async (e) => {
-	e.preventDefault();
-	const user = $('#user').value;
+function showUser(user) {
+  const email = document.createElement('p'),
+    token = document.createElement('p');
+  email.id = 'user-email';
+  token.id = 'user-token';
+  email.innerHTML = `<strong>Email:</strong> ${user.email}`;
+  token.innerHTML = `<strong>Token:</strong> ${user.token}`;
+  container.append(email, token);
+}
 
-	if (!user) return;
+function showContent() {
+  const user = $('section#user'),
+    authMessage = $('#auth-message'),
+    authenticatedMessage = $('#authenticated-message');
+  user.classList.remove('d-none');
+  authMessage.classList.add('d-none');
+  authenticatedMessage.classList.remove('d-none');
+}
 
-	const form = new FormData();
-	form.append('user', user);
+async function setup() {
+  // if user is authenticated, show more info
+  const u = await getUser();
+  if (u) {
+    showContent();
+    showUser(u);
+  }
+}
 
-	const response = await fetch(API_ENDPOINT, {
-		method: 'POST',
-		body: form,
-	});
-
-	const data = await response.json();
-
-	const child = document.createElement('li');
-	child.className = 'list-group-item';
-	child.innerText = data.user.name;
-
-	container.insertBefore(child, container.firstChild);
-
-	$('#user').value = '';
-});
-
-document.addEventListener('DOMContentLoaded', listUsers);
+document.addEventListener('DOMContentLoaded', setup);
